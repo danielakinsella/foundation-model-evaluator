@@ -49,7 +49,7 @@ resource "aws_appconfig_deployment_strategy" "linear" {
 
 # Read the model selection strategy JSON file
 locals {
-  model_selection_strategy = file("${path.module}/../model_selection_strategy.json")
+  model_selection_strategy = file("${path.module}/../config/model_selection_strategy.json")
 }
 
 # AWS AppConfig Hosted Configuration Version
