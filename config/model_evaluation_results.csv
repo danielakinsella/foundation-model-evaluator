@@ -1,0 +1,24 @@
+model_id,question,output,latency,token_count,similarity_score
+amazon.nova-lite-v1:0,What is a 401(k) retirement plan?,"A 401(k) retirement plan is a financial services product designed to help individuals save for retirement through employer-sponsored plans. Named after a section of the U.S. Internal Revenue Code, a 401(k) plan allows employees to contribute a portion of their pre-tax earnings to an investment account. These contributions are typically deducted directly from the employee's paycheck.
+
+Here are the key components and features of a 401(k) retirement plan:
+
+### 1. **Contributions:**
+- **Employee Contributions:** Employees can choose to contribute a percentage of their salary to the 401(k) plan. For 2023, the maximum annual contribution limit set by the IRS is $22,500. Individuals aged 50 and over can make an additional ""catch-up"" contribution of up to $7,500.
+- **Employer Contributions:** Many employers offer matching contributions, typically a percentage of the employee's salary. For instance, an employer might match 50% of the employee's contributions up to 6% of their salary. This matching contribution is a significant incentive for employees to participate in the plan.
+
+### 2. **Investment Options:**
+Participants in a 401(k) plan can choose from a range of investment options, which may include:
+- **Mutual Funds:** These pooled investment vehicles offer diversification by pooling money from multiple investors to buy a variety of securities.
+- **Exchange-Traded Funds (ETFs):** Similar to mutual funds but traded like stocks, ETFs offer diversification and flexibility.
+- **Company Stock:** Some 401(k) plans allow participants to invest in their employer's stock.
+- **Bonds and Certificates of Deposit (CDs):** These are generally lower-risk investment options.
+
+### 3. **Tax Benefits:**
+- **Pre-Tax Contributions:** Contributions to a traditional 401(k) are made with pre-tax dollars, reducing the employee's taxable income for the year. This lowers the individual's tax liability.
+- **Tax-Deferred Growth:** The investments in the 401(k) account grow on a tax-deferred basis, meaning that taxes are not due on the earnings until they are withdrawn.
+- **Required Minimum Distributions (RMDs):** Once the account holder reaches age 73 (",3.352,318,0.6
+amazon.titan-text-express-v1,What is a 401(k) retirement plan?," firm
+
+A 401(k) is a retirement savings plan that allows employees to set aside a portion of their pre-tax income into a tax-advantaged account, which can then be invested in an array of options, including stocks, bonds, and mutual funds.
+",2.945,42,0.7

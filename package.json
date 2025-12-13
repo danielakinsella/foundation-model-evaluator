@@ -1,5 +1,5 @@
 {
-    "name": "eval-framework",
+    "name": "Foundation Model Assessment",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
@@ -15,8 +15,8 @@
         "typescript": "^5.9.3"
     },
     "scripts": {
-        "exec": "node index.js",
         "build": "tsc",
-        "start": "ts-node eval-framework.ts"
+        "start:eval": "ts-node eval-framework.ts",
+        "start:selection": "ts-node selection.ts"
     }
 }
