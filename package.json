@@ -1,0 +1,22 @@
+{
+    "name": "eval-framework",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "keywords": [],
+    "author": "Daniela Kinsella",
+    "license": "ISC",
+    "dependencies": {
+        "@aws-sdk/client-bedrock-runtime": "^3.948.0"
+    },
+    "devDependencies": {
+        "@types/node": "^25.0.0",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.9.3"
+    },
+    "scripts": {
+        "exec": "node index.js",
+        "build": "tsc",
+        "start": "ts-node eval-framework.ts"
+    }
+}
