@@ -214,19 +214,13 @@ resource "aws_api_gateway_deployment" "main" {
 
   depends_on = [
     aws_api_gateway_integration.sfn,
-    aws_api_gateway_integration_response.sfn
+    aws_api_gateway_integration_response.sfn,
+    aws_api_gateway_method_response.response_200
   ]
 
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  # Force new deployment when integration changes
+  # Force new deployment on any change
   triggers = {
-    redeployment = sha1(jsonencode([
-      aws_api_gateway_integration.sfn,
-      aws_api_gateway_integration_response.sfn
-    ]))
+    redeployment = timestamp()
   }
 }
 
