@@ -6,20 +6,19 @@ on:
       - main
     paths:
       - 'terraform/**'
+      - 'src/**'
       - 'config/model_selection_strategy.json'
       - '.github/workflows/deploy-appconfig.yml'
 
 env:
   TF_VERSION: '1.9.8'
   AWS_REGION: 'us-east-1'
+  NODE_VERSION: '20'
 
 jobs:
   deploy:
     name: Deploy to AppConfig
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: terraform
 
     permissions:
       id-token: write
@@ -29,7 +28,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Lambda packages
+        run: npm run build:lambdas
+
       - name: Validate secrets
+        working-directory: terraform
         run: |
           if [ -z "${{ secrets.AWS_ROLE_ARN }}" ]; then
             echo "::error::AWS_ROLE_ARN secret is not configured"
@@ -48,16 +60,20 @@ jobs:
           terraform_version: ${{ env.TF_VERSION }}
 
       - name: Terraform Init
+        working-directory: terraform
         run: terraform init
 
       - name: Terraform Validate
+        working-directory: terraform
         run: terraform validate
 
       - name: Terraform Apply
+        working-directory: terraform
         run: terraform apply -auto-approve
 
       - name: Output AppConfig Details
         id: outputs
+        working-directory: terraform
         run: |
           echo "application_id=$(terraform output -raw application_id)" >> $GITHUB_OUTPUT
           echo "environment_id=$(terraform output -raw environment_id)" >> $GITHUB_OUTPUT

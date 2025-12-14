@@ -1,7 +1,7 @@
 # AWS AppConfig Application
-resource "aws_appconfig_application" "fm_assessment" {
+resource "aws_appconfig_application" "fm_evaluator" {
   name        = var.application_name
-  description = "Foundation Model Assessment application for model selection strategy"
+  description = "Foundation Model Evaluator - Model selection strategy management"
 
   tags = {
     Name = var.application_name
@@ -11,8 +11,8 @@ resource "aws_appconfig_application" "fm_assessment" {
 # AWS AppConfig Environment
 resource "aws_appconfig_environment" "main" {
   name           = var.environment
-  description    = "${var.environment} environment for AI Assistant"
-  application_id = aws_appconfig_application.fm_assessment.id
+  description    = "${var.environment} environment for Foundation Model Evaluator"
+  application_id = aws_appconfig_application.fm_evaluator.id
 
   tags = {
     Name = var.environment
@@ -21,7 +21,7 @@ resource "aws_appconfig_environment" "main" {
 
 # AWS AppConfig Configuration Profile
 resource "aws_appconfig_configuration_profile" "model_selection" {
-  application_id = aws_appconfig_application.fm_assessment.id
+  application_id = aws_appconfig_application.fm_evaluator.id
   name           = var.configuration_profile_name
   description    = "Model selection strategy configuration"
   location_uri   = "hosted"
@@ -34,7 +34,7 @@ resource "aws_appconfig_configuration_profile" "model_selection" {
 
 # AWS AppConfig Deployment Strategy
 resource "aws_appconfig_deployment_strategy" "linear" {
-  name                           = var.deployment_strategy_name
+  name                           = "${var.application_name_short}-${var.deployment_strategy_name}"
   description                    = "Linear deployment strategy for model selection"
   deployment_duration_in_minutes = var.deployment_duration_in_minutes
   final_bake_time_in_minutes     = var.final_bake_time_in_minutes
@@ -43,7 +43,7 @@ resource "aws_appconfig_deployment_strategy" "linear" {
   replicate_to                   = "NONE"
 
   tags = {
-    Name = var.deployment_strategy_name
+    Name = "${var.application_name_short}-${var.deployment_strategy_name}"
   }
 }
 
@@ -54,7 +54,7 @@ locals {
 
 # AWS AppConfig Hosted Configuration Version
 resource "aws_appconfig_hosted_configuration_version" "model_selection" {
-  application_id           = aws_appconfig_application.fm_assessment.id
+  application_id           = aws_appconfig_application.fm_evaluator.id
   configuration_profile_id = aws_appconfig_configuration_profile.model_selection.configuration_profile_id
   description              = "Model selection strategy configuration"
   content_type             = "application/json"
@@ -63,7 +63,7 @@ resource "aws_appconfig_hosted_configuration_version" "model_selection" {
 
 # AWS AppConfig Deployment
 resource "aws_appconfig_deployment" "model_selection" {
-  application_id           = aws_appconfig_application.fm_assessment.id
+  application_id           = aws_appconfig_application.fm_evaluator.id
   configuration_profile_id = aws_appconfig_configuration_profile.model_selection.configuration_profile_id
   configuration_version    = aws_appconfig_hosted_configuration_version.model_selection.version_number
   deployment_strategy_id   = aws_appconfig_deployment_strategy.linear.id
@@ -71,6 +71,6 @@ resource "aws_appconfig_deployment" "model_selection" {
   description              = "Deploying model selection strategy"
 
   tags = {
-    Name = "model-selection-deployment"
+    Name = "${var.application_name_short}-model-selection-deployment"
   }
 }

@@ -1,12 +1,13 @@
 {
-    "name": "Foundation Model Assessment",
+    "name": "foundation-model-evaluator",
     "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
+    "description": "Foundation Model Evaluator - Evaluate and select optimal AI models",
+    "main": "dist/index.js",
     "keywords": [],
     "author": "Daniela Kinsella",
     "license": "ISC",
     "dependencies": {
+        "@aws-sdk/client-appconfigdata": "^3.948.0",
         "@aws-sdk/client-bedrock-runtime": "^3.948.0"
     },
     "devDependencies": {
@@ -16,7 +17,9 @@
     },
     "scripts": {
         "build": "tsc",
-        "start:eval": "ts-node eval-framework.ts",
-        "start:selection": "ts-node selection.ts"
+        "build:lambdas": "npm run build && npm run package:lambdas",
+        "package:lambdas": "node scripts/package-lambdas.js",
+        "start:eval": "ts-node src/eval-framework.ts",
+        "start:selection": "ts-node src/selection.ts"
     }
 }

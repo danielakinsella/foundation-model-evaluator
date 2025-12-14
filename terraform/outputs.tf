@@ -1,11 +1,15 @@
+# -----------------------------------------------------------------------------
+# AppConfig Outputs
+# -----------------------------------------------------------------------------
+
 output "application_id" {
   description = "The AppConfig application ID"
-  value       = aws_appconfig_application.fm_assessment.id
+  value       = aws_appconfig_application.fm_evaluator.id
 }
 
 output "application_arn" {
   description = "The AppConfig application ARN"
-  value       = aws_appconfig_application.fm_assessment.arn
+  value       = aws_appconfig_application.fm_evaluator.arn
 }
 
 output "environment_id" {
@@ -34,7 +38,45 @@ output "appconfig_retrieval_info" {
     application    = var.application_name
     environment    = var.environment
     configuration  = var.configuration_profile_name
-    application_id = aws_appconfig_application.fm_assessment.id
+    application_id = aws_appconfig_application.fm_evaluator.id
     environment_id = aws_appconfig_environment.main.environment_id
   }
+}
+
+# -----------------------------------------------------------------------------
+# Step Functions Outputs
+# -----------------------------------------------------------------------------
+
+output "state_machine_arn" {
+  description = "ARN of the Foundation Model Evaluator Step Functions state machine"
+  value       = aws_sfn_state_machine.fm_evaluator.arn
+}
+
+output "state_machine_name" {
+  description = "Name of the Foundation Model Evaluator Step Functions state machine"
+  value       = aws_sfn_state_machine.fm_evaluator.name
+}
+
+output "step_functions_role_arn" {
+  description = "ARN of the IAM role used by Step Functions"
+  value       = aws_iam_role.step_functions.arn
+}
+
+# -----------------------------------------------------------------------------
+# API Gateway Outputs
+# -----------------------------------------------------------------------------
+
+output "api_endpoint" {
+  description = "API Gateway endpoint URL"
+  value       = "${aws_api_gateway_stage.main.invoke_url}/generate"
+}
+
+output "api_gateway_id" {
+  description = "API Gateway REST API ID"
+  value       = aws_api_gateway_rest_api.fm_evaluator.id
+}
+
+output "model_abstraction_lambda_arn" {
+  description = "ARN of the model abstraction Lambda function"
+  value       = aws_lambda_function.model_abstraction.arn
 }

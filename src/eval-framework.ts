@@ -3,7 +3,11 @@ import {
   InvokeModelCommand,
 } from "@aws-sdk/client-bedrock-runtime";
 import * as fs from "fs";
+import * as path from "path";
 import { TestCase, InvokeResult, EvaluationResult, SummaryResult } from "./types";
+
+// Resolve config directory path relative to this file
+const CONFIG_DIR = path.resolve(__dirname, "..", "config");
 // Initialize Bedrock client
 const bedrockRuntime = new BedrockRuntimeClient({ region: "us-east-1" });
 
@@ -241,7 +245,8 @@ async function main() {
 
   // Save results to CSV
   const csvContent = resultsToCSV(results);
-  fs.writeFileSync("../config/model_evaluation_results.csv", csvContent);
+  const outputPath = path.join(CONFIG_DIR, "model_evaluation_results.csv");
+  fs.writeFileSync(outputPath, csvContent);
 
   // Print summary
   console.log("\nEvaluation Summary:");

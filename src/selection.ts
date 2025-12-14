@@ -48,7 +48,11 @@
  */
 
 import * as fs from "fs";
+import * as path from "path";
 import { EvaluationResult, ModelSelectionStrategy, ModelScore } from "./types";
+
+// Resolve config directory path relative to this file
+const CONFIG_DIR = path.resolve(__dirname, "..", "config");
 
 
 
@@ -238,7 +242,9 @@ function loadResultsFromCSV(filePath: string): EvaluationResult[] {
 // Main Execution
 // ============================================================================
 
-const resultsFile = "../config/model_evaluation_results.csv";
+const resultsFile = path.join(CONFIG_DIR, "model_evaluation_results.csv");
+const strategyFile = path.join(CONFIG_DIR, "model_selection_strategy.json");
+
 if (fs.existsSync(resultsFile)) {
   const results = loadResultsFromCSV(resultsFile);
   const strategy = createModelSelectionStrategy(results);
@@ -246,11 +252,8 @@ if (fs.existsSync(resultsFile)) {
   console.log(JSON.stringify(strategy, null, 2));
 
   // Save strategy to file for AppConfig
-  fs.writeFileSync(
-    "../config/model_selection_strategy.json",
-    JSON.stringify(strategy, null, 2)
-  );
-  console.log("\nStrategy saved to ../config/model_selection_strategy.json");
+  fs.writeFileSync(strategyFile, JSON.stringify(strategy, null, 2));
+  console.log(`\nStrategy saved to ${strategyFile}`);
 } else {
   console.error(`Results file not found: ${resultsFile}`);
   console.error("Run eval-framework.ts first to generate evaluation results.");

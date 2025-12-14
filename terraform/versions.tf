@@ -11,7 +11,7 @@ terraform {
   # Uncomment and configure for remote state
   # backend "s3" {
   #   bucket         = "your-terraform-state-bucket"
-  #   key            = "fm-assessment/appconfig/terraform.tfstate"
+  #   key            = "fm-evaluator/terraform.tfstate"
   #   region         = "us-east-1"
   #   encrypt        = true
   #   dynamodb_table = "terraform-state-lock"
@@ -23,7 +23,7 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Project     = "FoundationModelAssessment"
+      Project     = "FoundationModelEvaluator"
       ManagedBy   = "terraform"
       Environment = var.environment
     }
