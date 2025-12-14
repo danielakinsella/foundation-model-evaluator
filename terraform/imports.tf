@@ -8,6 +8,18 @@ import {
   id = "zp0tfpk"
 }
 
+# Import existing AppConfig Environment (format: environment_id:application_id)
+import {
+  to = aws_appconfig_environment.main
+  id = "wvs4sg1:zp0tfpk"
+}
+
+# Import existing AppConfig Configuration Profile (format: profile_id:application_id)
+import {
+  to = aws_appconfig_configuration_profile.model_selection
+  id = "od9pnlr:zp0tfpk"
+}
+
 # Import existing IAM Role for Lambda execution
 import {
   to = aws_iam_role.lambda_execution
