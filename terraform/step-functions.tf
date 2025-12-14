@@ -67,10 +67,11 @@ resource "aws_cloudwatch_log_group" "step_functions" {
   }
 }
 
-# Step Functions State Machine
+# Step Functions State Machine (Express for synchronous API Gateway integration)
 resource "aws_sfn_state_machine" "fm_evaluator" {
   name     = "${var.application_name_short}-workflow"
   role_arn = aws_iam_role.step_functions.arn
+  type     = "EXPRESS"
 
   definition = jsonencode({
     Comment = "Foundation Model Evaluator - Circuit Breaker Pattern"
