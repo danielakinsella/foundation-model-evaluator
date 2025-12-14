@@ -1,0 +1,33 @@
+# Import blocks for existing AWS resources
+# These allow Terraform to adopt existing resources into state management
+# After successful import, these blocks can be removed
+
+# Import existing AppConfig Application
+import {
+  to = aws_appconfig_application.fm_evaluator
+  id = "zp0tfpk"
+}
+
+# Import existing IAM Role for Lambda execution
+import {
+  to = aws_iam_role.lambda_execution
+  id = "fm-evaluator-lambda-execution-production"
+}
+
+# Import existing IAM Role for Step Functions
+import {
+  to = aws_iam_role.step_functions
+  id = "fm-evaluator-step-functions-role"
+}
+
+# Import S3 bucket (created by bootstrap step in GitHub Actions)
+import {
+  to = aws_s3_bucket.terraform_state
+  id = "fm-evaluator-terraform-state-832787421689"
+}
+
+# Import DynamoDB table (created by bootstrap step in GitHub Actions)
+import {
+  to = aws_dynamodb_table.terraform_locks
+  id = "fm-evaluator-terraform-locks"
+}

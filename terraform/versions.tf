@@ -4,18 +4,24 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 6.26.0"
+      version = "~> 5.0"
+    }
+    archive = {
+      source  = "hashicorp/archive"
+      version = "~> 2.0"
     }
   }
 
-  # Uncomment and configure for remote state
-  # backend "s3" {
-  #   bucket         = "your-terraform-state-bucket"
-  #   key            = "fm-evaluator/terraform.tfstate"
-  #   region         = "us-east-1"
-  #   encrypt        = true
-  #   dynamodb_table = "terraform-state-lock"
-  # }
+  # S3 Backend for remote state storage
+  # Before using, run the bootstrap configuration in terraform/bootstrap/
+  # Then update the bucket name below with your account ID
+  backend "s3" {
+    bucket         = "fm-evaluator-terraform-state-832787421689"
+    key            = "fm-evaluator/terraform.tfstate"
+    region         = "us-east-1"
+    encrypt        = true
+    dynamodb_table = "fm-evaluator-terraform-locks"
+  }
 }
 
 provider "aws" {
