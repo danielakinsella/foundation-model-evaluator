@@ -22,15 +22,6 @@ resource "aws_iam_role" "step_functions" {
   }
 }
 
-# Compute Lambda ARNs - use provided values or fallback to model_abstraction Lambda
-locals {
-  step_function_lambda_arns = compact([
-    var.primary_model_lambda_arn != "" ? var.primary_model_lambda_arn : aws_lambda_function.model_abstraction.arn,
-    var.fallback_model_lambda_arn,
-    var.degradation_lambda_arn
-  ])
-}
-
 # IAM Policy for Step Functions to invoke Lambda
 resource "aws_iam_role_policy" "step_functions_lambda" {
   name = "${var.application_name_short}-step-functions-lambda-policy"
@@ -40,9 +31,13 @@ resource "aws_iam_role_policy" "step_functions_lambda" {
     Version = "2012-10-17"
     Statement = [
       {
-        Effect   = "Allow"
-        Action   = ["lambda:InvokeFunction"]
-        Resource = length(local.step_function_lambda_arns) > 0 ? local.step_function_lambda_arns : ["arn:aws:lambda:*:*:function:placeholder"]
+        Effect = "Allow"
+        Action = ["lambda:InvokeFunction"]
+        Resource = [
+          aws_lambda_function.primary.arn,
+          aws_lambda_function.fallback.arn,
+          aws_lambda_function.degradation.arn
+        ]
       },
       {
         Effect = "Allow"
@@ -72,13 +67,6 @@ resource "aws_cloudwatch_log_group" "step_functions" {
   }
 }
 
-# Compute effective Lambda ARNs for Step Functions state machine
-locals {
-  effective_primary_lambda_arn     = var.primary_model_lambda_arn != "" ? var.primary_model_lambda_arn : aws_lambda_function.model_abstraction.arn
-  effective_fallback_lambda_arn    = var.fallback_model_lambda_arn != "" ? var.fallback_model_lambda_arn : aws_lambda_function.model_abstraction.arn
-  effective_degradation_lambda_arn = var.degradation_lambda_arn != "" ? var.degradation_lambda_arn : aws_lambda_function.model_abstraction.arn
-}
-
 # Step Functions State Machine
 resource "aws_sfn_state_machine" "fm_evaluator" {
   name     = "${var.application_name_short}-workflow"
@@ -92,7 +80,7 @@ resource "aws_sfn_state_machine" "fm_evaluator" {
         Type     = "Task"
         Resource = "arn:aws:states:::lambda:invoke"
         Parameters = {
-          FunctionName = local.effective_primary_lambda_arn
+          FunctionName = aws_lambda_function.primary.arn
           Payload = {
             "prompt.$"   = "$.prompt"
             "use_case.$" = "$.use_case"
@@ -119,7 +107,7 @@ resource "aws_sfn_state_machine" "fm_evaluator" {
         Type     = "Task"
         Resource = "arn:aws:states:::lambda:invoke"
         Parameters = {
-          FunctionName = local.effective_fallback_lambda_arn
+          FunctionName = aws_lambda_function.fallback.arn
           Payload = {
             "prompt.$"    = "$.prompt"
             "use_case.$"  = "$.use_case"
@@ -147,7 +135,7 @@ resource "aws_sfn_state_machine" "fm_evaluator" {
         Type     = "Task"
         Resource = "arn:aws:states:::lambda:invoke"
         Parameters = {
-          FunctionName = local.effective_degradation_lambda_arn
+          FunctionName = aws_lambda_function.degradation.arn
           Payload = {
             "prompt.$"   = "$.prompt"
             "use_case.$" = "$.use_case"

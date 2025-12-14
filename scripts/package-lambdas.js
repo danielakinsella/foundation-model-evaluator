@@ -6,7 +6,7 @@ const distDir = path.join(__dirname, '..', 'dist');
 const lambdaDistDir = path.join(distDir, 'lambdas');
 
 const lambdas = [
-  'model-abstraction-lambda',
+  'primary-lambda',
   'fallback-lambda',
   'degradation-lambda'
 ];

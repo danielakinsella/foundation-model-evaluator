@@ -51,39 +51,3 @@ variable "final_bake_time_in_minutes" {
   type        = number
   default     = 5
 }
-
-# Step Functions Lambda ARNs
-# Note: These can be left empty if not using Step Functions workflow
-# When using Step Functions, provide the ARNs of deployed Lambda functions
-variable "primary_model_lambda_arn" {
-  description = "ARN of the Lambda function for primary model invocation (use model_abstraction_lambda_arn output)"
-  type        = string
-  default     = ""
-
-  validation {
-    condition     = var.primary_model_lambda_arn == "" || can(regex("^arn:aws:lambda:", var.primary_model_lambda_arn))
-    error_message = "primary_model_lambda_arn must be empty or a valid Lambda ARN."
-  }
-}
-
-variable "fallback_model_lambda_arn" {
-  description = "ARN of the Lambda function for fallback model invocation"
-  type        = string
-  default     = ""
-
-  validation {
-    condition     = var.fallback_model_lambda_arn == "" || can(regex("^arn:aws:lambda:", var.fallback_model_lambda_arn))
-    error_message = "fallback_model_lambda_arn must be empty or a valid Lambda ARN."
-  }
-}
-
-variable "degradation_lambda_arn" {
-  description = "ARN of the Lambda function for graceful degradation"
-  type        = string
-  default     = ""
-
-  validation {
-    condition     = var.degradation_lambda_arn == "" || can(regex("^arn:aws:lambda:", var.degradation_lambda_arn))
-    error_message = "degradation_lambda_arn must be empty or a valid Lambda ARN."
-  }
-}

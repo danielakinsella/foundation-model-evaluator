@@ -75,8 +75,3 @@ output "api_gateway_id" {
   description = "API Gateway REST API ID"
   value       = aws_api_gateway_rest_api.fm_evaluator.id
 }
-
-output "model_abstraction_lambda_arn" {
-  description = "ARN of the model abstraction Lambda function"
-  value       = aws_lambda_function.model_abstraction.arn
-}
